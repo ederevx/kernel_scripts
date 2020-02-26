@@ -1,0 +1,134 @@
+#!/bin/bash
+#
+# Xecutables
+#
+
+#
+# Variable declarations
+#
+
+TEST_BUILD=y
+
+SRC_DIR=$HOME/kernel
+OUT_DIR=$HOME/output
+REL_DIR=$HOME/releases
+TEST_DIR=$HOME/test
+SRT_DIR=$HOME/scripts
+ZIP_DIR=$HOME/zip
+LOG_DIR=$HOME/buildlog
+
+AUTH_STR="ederekun <sedrickvince@gmail.com>"
+
+JN=10
+LN=8
+
+SRCN="x"
+DC="op5_defconfig"
+CURR_DATE="$(date +'%Y%m%d')"
+BRNCH_VER=$CURR_DATE
+VER=1
+
+AF="arch/arm64/configs"
+ARCH="arm64"
+SUBARCH=$ARCH
+LWIMG="Image.gz-dtb"
+
+CC_PATH=""
+export PATH="$CC_PATH:$PATH"
+
+C64="aarch64-linux-gnu-"
+C32="arm-linux-gnueabi-"
+CC="${C64}gcc"
+
+#
+# Function declarations
+#
+
+border() {
+    for ((i = 0; i < 50; i++)); do
+        printf -
+    done
+    echo ""
+}
+
+decho() {
+    border
+	echo $1
+    border
+}
+
+decho_log() {
+    decho "$1"
+    decho "$1" >> $LOG
+}
+
+create_dir() {
+	decho "No $1 directory found! Creating $1"
+	mkdir $1
+}
+
+update_repo() {
+	cd $1
+    decho "Updating $1 repository..."
+
+    if [[ $1 == "$ZIP_DIR" ]]; then
+        git pull --no-rebase upstream master
+        git merge FETCH_HEAD
+    fi
+
+	git pull --ff-only
+}
+
+update_linux() {
+    decho "Updating applications and binaries..."
+    sudo apt-get update
+    sudo apt-get upgrade
+    sudo apt-get dist-upgrade
+    sudo apt-get autoremove
+    sudo apt-get clean
+}
+ 
+commit_repo() {
+    cd $1
+    decho "Commiting in $1 repository..."
+    if [[ $2 == "-a" ]]; then
+        git add -A
+    fi
+	git commit -s -e --author="$AUTH_STR" --date="$(date -R)"
+}
+
+watch_logs() {
+    qterminal -e sudo less +F $1 > /dev/null 2>&1 & disown
+}
+
+send_tg_msg() {
+    curl -X POST "https://api.telegram.org/bot$BOT_ID/sendMessage" \
+		-d "chat_id=$CHAT_ID&text=$1" &> /dev/null
+}
+
+send_tg_file() {
+	curl -F chat_id=$CHAT_ID -F document=@$1 \
+		https://api.telegram.org/bot$BOT_ID/sendDocument &> /dev/null
+}
+
+make_cmd() {
+    decho_log "Executing make $1..."
+    make $MKP $1 2>> $LOG
+}
+
+zip_image() {
+    decho_log "Zipping the image..."
+    zip -r9 $1.zip * -x .git README.md 2>> $LOG
+}
+
+push_update() {
+    decho_log "Pushing update..."
+    if [ -f $1.zip ]; then
+        send_tg_msg "Build finished successfully!"
+        send_tg_msg "$KNAME release: revision $VER built using $CF | Date: $(date -R)"
+        send_tg_file $1.zip
+    else
+        send_tg_msg "$KNAME was not built!"
+        send_tg_file $BLOG
+    fi
+}
