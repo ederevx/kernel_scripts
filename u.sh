@@ -7,6 +7,8 @@ source xect
 
 decho "Executing update script..."
 
+param_func "$@"
+
 update_linux
 
 if [[ $1 == "-x" ]]; then

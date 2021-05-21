@@ -111,6 +111,11 @@ send_tg_file() {
 		https://api.telegram.org/bot$BOT_ID/sendDocument &> /dev/null
 }
 
+err_tg_msg() {
+	send_tg_msg "$KNAME was not built! Something went wrong..."
+	send_tg_file $LOG
+}
+
 make_cmd() {
     decho_log "Executing make $1..."
     make $MKP $1 2>> $LOG
@@ -125,10 +130,64 @@ push_update() {
     decho_log "Pushing update..."
     if [ -f $1.zip ]; then
         send_tg_msg "Build finished successfully!"
-        send_tg_msg "$KNAME release: revision $VER built using $CF | Date: $(date -R)"
+        send_tg_msg "$SRCN release: $SRC_BRNCH-$BRNCH_VER-$VER built using $CF | Date: $(date -R)"
         send_tg_file $1.zip
     else
-        send_tg_msg "$KNAME was not built!"
-        send_tg_file $BLOG
+        err_tg_msg
     fi
+}
+
+check_valid() {
+	if [[ ${1:0:1} != "-" ]] && [[ $1 != "" ]]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
+param_func() {
+	while [[ $# -gt 0 ]]
+		do
+		key="$1"
+
+		case $key in
+			-s|--source)
+				if check_valid "$2"; then
+					SRCN="$2"
+					shift
+				fi
+			;;
+			-b|--branch)
+				if check_valid "$2"; then
+					SRC_BRNCH="$2"
+					shift
+				fi
+			;;
+			-v|--version)
+				if check_valid "$2"; then
+					VER="$2"
+					shift
+				fi
+			;;
+			-cl|--clang)
+				if check_valid "$2"; then
+					CVER="$2"
+					shift
+				else
+					decho "Set to default clang version 13"
+					CVER=13
+				fi
+			;;
+			-a|--all)
+				BUILD_ALL=y
+			;;
+			-c|--configure)
+				CONFIGURE=y
+			;;
+			-t|--test)
+				TEST_BUILD=y
+			;;
+		esac
+		shift
+	done
 }

@@ -11,63 +11,8 @@ decho "Executing build script..."
 # Build functions
 #
 
-check_valid() {
-	if [[ ${1:0:1} != "-" ]] && [[ $1 != "" ]]; then
-		return 0
-	else
-		return 1
-	fi
-}
-
-param_func() {
-	while [[ $# -gt 0 ]]
-		do
-		key="$1"
-
-		case $key in
-			-s|--source)
-				if check_valid "$2"; then
-					SRCN="$2"
-					shift
-				fi
-			;;
-			-b|--branch)
-				if check_valid "$2"; then
-					SRC_BRNCH="$2"
-					shift
-				fi
-			;;
-			-v|--version)
-				if check_valid "$2"; then
-					VER="$2"
-					shift
-				fi
-			;;
-			-cl|--clang)
-				if check_valid "$2"; then
-					CVER="$2"
-					shift
-				else
-					decho "Set to default clang version 13"
-					CVER=13
-				fi
-			;;
-			-a|--all)
-				BUILD_ALL=y
-			;;
-			-c|--configure)
-				CONFIGURE=y
-			;;
-			-t|--test)
-				TEST_BUILD=y
-			;;
-		esac
-		shift
-	done
-}
-
 define_kname() {
-	KNAME="$SRCN-$SRC_BRNCH-$BRNCH_VER$VER"
+	KNAME="$SRCN-$SRC_BRNCH-$BRNCH_VER-$VER"
 	if [[ $TEST_BUILD == "y" ]]; then
 		KNAME="$KNAME-test"
 	fi
@@ -110,7 +55,7 @@ define_clang() {
 }
 
 define_env() {
-	OUT=$OUT_DIR/$SRCN/$SRC_BRNCH-out
+	OUT=$OUT_DIR/$SRCN/$SRC_BRNCH
 	BTI=$OUT/arch/arm64/boot
 
 	define_kname
@@ -224,7 +169,7 @@ zip_func() {
 		border
 		echo "You are flashing:"
 		echo "$SRCN kernel by ederekun"
-		echo "Build code: $SRC_BRNCH-$BRNCH_VER$VER"
+		echo "Build code: $SRC_BRNCH-$BRNCH_VER-$VER"
 		border
 	} >> version
 
@@ -236,27 +181,29 @@ zip_func() {
 
 main_func() {
 	if [ ! -d $SRC_DIR ] || [[ $SRCN == "" ]]; then
-		decho "Abort, source directory must exist and source name must be defined."
+		decho_log "Abort, source directory must exist and source name must be defined."
 		exit 1
 	fi
 
 	build_func
 
 	if [ ! -f $BTI/$LWIMG ]; then
-		decho "There's no image found in $OUT!"
-		send_tg_msg "$KNAME was not built! Panda is panicking :'("
+		decho_log "There's no image found in $OUT!"
+		err_tg_msg
+	elif [ ! -d $ZIP_DIR ]; then
+		decho_log "There's no zip directory, abort."
+		err_tg_msg
 	else
 		zip_func
 
 		push_update $PUSH_DIR/$KNAME
 
 		if [[ $TEST_BUILD != "y" ]]; then
-			commit_repo $REL_DIR "$KNAME release: revision $VER built using $CF"
+			commit_repo $REL_DIR "$SRCN release: $SRC_BRNCH-$BRNCH_VER-$VER built using $CF"
 		fi
 	fi
 
-	decho "Build done: $(date -R)" >> $LOG
-	decho_log "Build done."
+	decho_log "Build done: $(date -R)"
 }
 
 param_main_func() {
@@ -281,7 +228,7 @@ BOT_ID=1705973222:AAFjMihR-1nivjo2U3Tic9tbztJBnUK0eEY
 if [[ $SRCN == "lazy" ]]; then
 	DC="lazy_defconfig"
 	BOT_ID=1164940747:AAGWc84XThFpq1xLdUuA2t745uJPjBmDHg4
-	BRNCH_VER="v2.4-$BRNCH_VER-"
+	BRNCH_VER="v2.4-$BRNCH_VER"
 fi
 
 if [[ $TEST_BUILD == "y" ]]; then

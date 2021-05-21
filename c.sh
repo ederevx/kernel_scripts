@@ -7,6 +7,8 @@ source xect
 
 decho "Executing commit script..."
 
+param_func "$@"
+
 if [ -d $REL_DIR ]; then
 	commit_repo $REL_DIR $1
 fi
