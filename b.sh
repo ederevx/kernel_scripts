@@ -199,7 +199,7 @@ main_func() {
 		push_update $PUSH_DIR/$KNAME
 
 		if [[ $TEST_BUILD != "y" ]]; then
-			commit_repo $REL_DIR "$SRCN release: $SRC_BRNCH-$BRNCH_VER-$VER built using $CF"
+			commit_repo $REL_DIR "$BUILD_STR"
 		fi
 	fi
 
@@ -239,9 +239,9 @@ fi
 
 if [[ $SRCN == "lazy" ]] && [[ $BUILD_ALL == "y" ]]; then
 	decho "Building all branches"
-	param_main_func -b oos-develop
 	param_main_func -b custom-develop
 	param_main_func -b custom-old-develop
+	param_main_func -b oos-develop
 	param_main_func -b pa-develop
 else
 	main_func

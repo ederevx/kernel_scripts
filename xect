@@ -18,6 +18,8 @@ ZIP_DIR=$HOME/zip
 LOG_DIR=$HOME/buildlog
 
 AUTH_STR="ederekun <sedrickvince@gmail.com>"
+BUILD_STR="$SRCN release: $SRC_BRNCH-$BRNCH_VER-$VER \
+			built using $CF | Date: $(date -R)"
 
 JN=10
 LN=8
@@ -129,8 +131,7 @@ zip_image() {
 push_update() {
     decho_log "Pushing update..."
     if [ -f $1.zip ]; then
-        send_tg_msg "Build finished successfully!"
-        send_tg_msg "$SRCN release: $SRC_BRNCH-$BRNCH_VER-$VER built using $CF | Date: $(date -R)"
+        send_tg_msg "Build finished successfully! $BUILD_STR"
         send_tg_file $1.zip
     else
         err_tg_msg
@@ -184,8 +185,8 @@ param_func() {
 			-c|--configure)
 				CONFIGURE=y
 			;;
-			-t|--test)
-				TEST_BUILD=y
+			-r|--release)
+				TEST_BUILD=n
 			;;
 		esac
 		shift
