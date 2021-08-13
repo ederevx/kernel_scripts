@@ -18,8 +18,6 @@ ZIP_DIR=$HOME/zip
 LOG_DIR=$HOME/buildlog
 
 AUTH_STR="ederekun <sedrickvince@gmail.com>"
-BUILD_STR="$SRCN release: $SRC_BRNCH-$BRNCH_VER-$VER \
-			built using $CF | Date: $(date -R)"
 
 JN=10
 LN=8

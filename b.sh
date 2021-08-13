@@ -74,6 +74,9 @@ define_env() {
 		define_clang
 	fi
 
+	BUILD_STR="$SRCN release: $SRC_BRNCH-$BRNCH_VER-$VER \
+				built using $CF | Date: $(date -R)"
+
 	MKP=" \
 		$CLANGMKP \
 		ARCH=$ARCH \
