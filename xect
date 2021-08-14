@@ -113,7 +113,7 @@ commit_repo() {
 			;;
 			-m|--message)
 				if check_valid "$2"; then
-					C_CMD="$C_CMD --message="$2""
+					C_MSG="$2"
 					shift
 				fi
 			;;
@@ -124,7 +124,7 @@ commit_repo() {
 		shift
 	done
 
-	git commit -s --author="$AUTH_STR" --date="$DATE_FULL" $C_CMD
+	git commit $C_CMD -s -m "$C_MSG" --author="$AUTH_STR" --date="$DATE_FULL"
 }
 
 watch_logs() {
