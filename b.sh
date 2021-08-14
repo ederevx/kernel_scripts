@@ -12,7 +12,8 @@ decho "Executing build script..."
 #
 
 define_kname() {
-	KNAME="$SRCN-$SRC_BRNCH-$BRNCH_VER-$VER"
+	SRC_VER="v$HEAD_VER-$BRNCH_VER"
+	KNAME="$SRCN-$SRC_BRNCH-$SRC_VER-$VER"
 	if [[ $TEST_BUILD == "y" ]]; then
 		KNAME="$KNAME-test"
 	fi
@@ -74,8 +75,7 @@ define_env() {
 		define_clang
 	fi
 
-	BUILD_STR="$SRCN release: $SRC_BRNCH-$BRNCH_VER-$VER \
-				built using $CF | Date: $(date -R)"
+	BUILD_STR="$SRCN release: $SRC_BRNCH-$SRC_VER-$VER built using $CF | Date: $DATE_FULL"
 
 	MKP=" \
 		$CLANGMKP \
@@ -101,7 +101,7 @@ watch_func() {
 			echo "" > $LOG
 		fi
 
-		decho "Build start: $(date -R)" >> $LOG
+		decho "Build start: $DATE_FULL" >> $LOG
 		watch_logs $LOG
 		send_tg_msg "Build started: $KNAME is being built using $CF"
 		decho "Make variables: $MKP" >> $LOG
@@ -202,11 +202,13 @@ main_func() {
 		push_update $PUSH_DIR/$KNAME
 
 		if [[ $TEST_BUILD != "y" ]]; then
-			commit_repo $REL_DIR "$BUILD_STR"
+			cd $REL_DIR
+			git checkout $HEAD_VER
+			commit_repo $(pwd) -m "$BUILD_STR" -a
 		fi
 	fi
 
-	decho_log "Build done: $(date -R)"
+	decho_log "Build done: $DATE_FULL"
 }
 
 param_main_func() {
@@ -231,7 +233,7 @@ BOT_ID=1705973222:AAFjMihR-1nivjo2U3Tic9tbztJBnUK0eEY
 if [[ $SRCN == "lazy" ]]; then
 	DC="lazy_defconfig"
 	BOT_ID=1164940747:AAGWc84XThFpq1xLdUuA2t745uJPjBmDHg4
-	BRNCH_VER="v2.4-$BRNCH_VER"
+	HEAD_VER=2.4
 fi
 
 if [[ $TEST_BUILD == "y" ]]; then

@@ -25,6 +25,8 @@ LN=8
 SRCN="x"
 DC="op5_defconfig"
 CURR_DATE="$(date +'%Y%m%d')"
+DATE_FULL="$(date -R)"
+HEAD_VER=1
 BRNCH_VER=$CURR_DATE
 VER=1
 
@@ -87,14 +89,42 @@ update_linux() {
     sudo apt-get autoremove
     sudo apt-get clean
 }
- 
+
+check_valid() {
+	if [[ ${1:0:1} != "-" ]] && [[ $1 != "" ]]; then
+		return 0
+	else
+		return 1
+	fi
+}
+
 commit_repo() {
     cd $1
     decho "Commiting in $1 repository..."
-    if [[ $2 == "-a" ]]; then
-        git add -A
-    fi
-	git commit -s -e --author="$AUTH_STR" --date="$(date -R)"
+
+	C_CMD=""
+	while [[ $# -gt 0 ]]
+		do
+		key="$1"
+
+		case $key in
+			-a|--add)
+				git add -A
+			;;
+			-m|--message)
+				if check_valid "$2"; then
+					C_CMD="$C_CMD --message="$2""
+					shift
+				fi
+			;;
+			-e|--edit)
+				C_CMD="-e $C_CMD"
+			;;
+		esac
+		shift
+	done
+
+	git commit -s --author="$AUTH_STR" --date="$DATE_FULL" $C_CMD
 }
 
 watch_logs() {
@@ -134,14 +164,6 @@ push_update() {
     else
         err_tg_msg
     fi
-}
-
-check_valid() {
-	if [[ ${1:0:1} != "-" ]] && [[ $1 != "" ]]; then
-		return 0
-	else
-		return 1
-	fi
 }
 
 param_func() {
