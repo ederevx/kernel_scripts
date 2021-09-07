@@ -8,6 +8,7 @@
 #
 
 TEST_BUILD=y
+DEBUG=n
 
 SRC_DIR=$HOME/kernel
 OUT_DIR=$HOME/output
@@ -207,6 +208,9 @@ param_func() {
 			;;
 			-r|--release)
 				TEST_BUILD=n
+			;;
+			-d|--debug)
+				DEBUG=y
 			;;
 		esac
 		shift
