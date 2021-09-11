@@ -55,6 +55,11 @@ define_clang() {
 		CLANG_TRIPLE=$CLANG_TRIPLE"
 }
 
+define_debug() {
+	DEBUGMKP="	\
+		CONFIG_DEBUG_SECTION_MISMATCH=y"
+}
+
 define_env() {
 	OUT=$OUT_DIR/$SRCN/$SRC_BRNCH
 	BTI=$OUT/arch/arm64/boot
@@ -75,11 +80,15 @@ define_env() {
 		define_clang
 	fi
 
+	if [[ $DEBUG != "n" ]]; then
+		define_debug
+	fi
+
 	BUILD_STR="$SRCN release: $SRC_BRNCH-$SRC_VER-$VER built using $CF | Date: $DATE_FULL"
 
 	MKP=" \
 		$CLANGMKP \
-		CONFIG_DEBUG_SECTION_MISMATCH=$DEBUG \
+		$DEBUGMKP \
 		ARCH=$ARCH \
 		SUBARCH=$SUBARCH \
 		CROSS_COMPILE=$C64 \
