@@ -16,7 +16,7 @@ if [[ $1 == "-x" ]]; then
 fi
 
 if [ -d $REL_DIR ]; then
-	update_repo $ZIP_DIR
+	update_repo $REL_DIR
 fi
 
 if [ -d $SRT_DIR ]; then
