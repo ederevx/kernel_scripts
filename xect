@@ -24,7 +24,7 @@ JN=10
 LN=8
 
 SRCN="x"
-DC="lineage_oneplus5_defconfig"
+DC="oneplus5_defconfig"
 CURR_DATE="$(date +'%Y%m%d')"
 DATE_FULL="$(date -R)"
 HEAD_VER=1
