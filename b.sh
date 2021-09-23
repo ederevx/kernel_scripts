@@ -113,7 +113,6 @@ watch_func() {
 
 		decho "Build start: $DATE_FULL" >> $LOG
 		watch_logs $LOG
-		send_tg_msg "Build started: $KNAME is being built using $CF"
 		decho "Make variables: $MKP" >> $LOG
 	else
 		LOG=/dev/null
