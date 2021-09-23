@@ -212,6 +212,9 @@ param_func() {
 			-d|--debug)
 				DEBUG=y
 			;;
+			-mo|--make-only)
+				MAKE_ONLY=y
+			;;
 		esac
 		shift
 	done
