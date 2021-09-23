@@ -158,7 +158,8 @@ build_func() {
 	time make_cmd $DC
 
 	if [[ $MAKE_ONLY == "y" ]]; then
-		decho "Done generating .config at $OUT"
+		decho_log "Done generating .config at $OUT"
+		code $OUT/.config
 		exit 0
 	fi
 
