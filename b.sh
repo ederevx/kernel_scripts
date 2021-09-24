@@ -66,11 +66,13 @@ define_env() {
 
 	define_kname
 
-	while [[ -f $PUSH_DIR/$KNAME.zip ]]
-		do
-		VER="$(($VER + 1))"
-		define_kname
-	done
+	if [[ $FORCE_VER != "y" ]]; then
+		while [[ -f $PUSH_DIR/$KNAME.zip ]]
+			do
+			VER="$(($VER + 1))"
+			define_kname
+		done
+	fi
 
 	LOCALVERSION="-$KNAME"
 

@@ -187,6 +187,7 @@ param_func() {
 			;;
 			-v|--version)
 				if check_valid "$2"; then
+					FORCE_VER=y
 					VER="$2"
 					shift
 				fi
