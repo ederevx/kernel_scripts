@@ -11,9 +11,33 @@ decho "Executing build script..."
 # Build functions
 #
 
+watch_func() {
+	if [[ $1 != "n" ]]; then
+		if [ ! -d $LOG_DIR ]; then
+			create_dir $LOG_DIR
+		fi
+
+		if [ ! -f $LOG ]; then
+			touch $LOG_DIR/$KNAME.log
+		else
+			echo "" > $LOG
+		fi
+
+		decho "Build start: $DATE_FULL" >> $LOG
+		watch_logs $LOG
+	else
+		LOG=/dev/null
+	fi
+}
+
 define_kname() {
-	SRC_VER="v$HEAD_VER-$BRNCH_VER"
-	KNAME="$SRCN-$SRC_BRNCH-$SRC_VER-$VER"
+	if [[ $SRCN == "fourteen" ]]; then
+		SRC_VER="$BRNCH_VER"
+		KNAME="$SRCN-$SRC_VER-$VER"
+	else
+		SRC_VER="v$HEAD_VER-$BRNCH_VER"
+		KNAME="$SRCN-$SRC_BRNCH-$SRC_VER-$VER"
+	fi
 	if [[ $TEST_BUILD == "y" ]]; then
 		KNAME="$KNAME-test"
 	fi
@@ -36,6 +60,7 @@ define_clang() {
 	CLANGMKP=" \
 		CC=$CC \
 		CXX=$CXX \
+		CPP=$CXX \
 		HOSTCC=$CC \
 		HOSTCXX=$CXX \
 		AS=$AS \
@@ -52,15 +77,27 @@ define_clang() {
 		OBJDUMP=$OBJDUMP \
 		STRIP=$STRIP \
 		READELF=$READELF \
-		CLANG_TRIPLE=$CLANG_TRIPLE"
+		CLANG_TRIPLE=$CLANG_TRIPLE \
+		"
 }
 
 define_debug() {
 	DEBUGMKP="	\
-		CONFIG_DEBUG_SECTION_MISMATCH=y"
+		CONFIG_DEBUG_SECTION_MISMATCH=y \
+		"
 }
 
 define_env() {
+	if [[ $SRC_BRNCH != "" ]]; then
+		decho "Checking out branch..."
+		git checkout $SRC_BRNCH
+	else
+		CURRBRNCH="$(git rev-parse --abbrev-ref HEAD)"
+		SRC_BRNCH=$CURRBRNCH
+
+		decho "Using current branch..."
+	fi
+
 	OUT=$OUT_DIR/$SRCN/$SRC_BRNCH
 	BTI=$OUT/arch/arm64/boot
 
@@ -74,11 +111,32 @@ define_env() {
 		done
 	fi
 
-	LOCALVERSION="-$KNAME"
-
 	LOG=$LOG_DIR/$KNAME.log
 
+	if [[ $CONFIGURE == "y" ]]; then
+		watch_func n
+		{
+			border
+			echo "Configure only, no builds will be made..."
+		} >> $LOG
+	else
+		watch_func y
+		{
+			border
+			echo "Branch to be built: $SRC_BRNCH"
+		} >> $LOG
+	fi
+
+	{
+		echo "Last Commit:"
+		echo $(git -C $SRC_DIR log -1 --pretty=%B)
+		border
+	} >> $LOG
+
+	LOCALVERSION="-$KNAME"
+
 	if [[ $CVER != "" ]]; then
+		decho_log "Use clang $CVER toolchain"
 		define_clang
 	fi
 
@@ -98,57 +156,16 @@ define_env() {
 		LOCALVERSION=-$KNAME \
 		O=$OUT \
 		-j$JN \
-		-l$LN"
-}
+		-l$LN \
+		"
 
-watch_func() {
-	if [[ $1 != "n" ]]; then
-		if [ ! -d $LOG_DIR ]; then
-			create_dir $LOG_DIR
-		fi
-
-		if [ ! -f $LOG ]; then
-			touch $LOG_DIR/$KNAME.log
-		else
-			echo "" > $LOG
-		fi
-
-		decho "Build start: $DATE_FULL" >> $LOG
-		watch_logs $LOG
-		decho "Make variables: $MKP" >> $LOG
-	else
-		LOG=/dev/null
-	fi
+	decho "Make variables: $MKP" >> $LOG
 }
 
 build_func() {
 	cd $SRC_DIR
 
-	if [[ $SRC_BRNCH != "" ]]; then
-		decho "Checking out branch..."
-		git checkout $SRC_BRNCH
-	else
-		CURRBRNCH="$(git rev-parse --abbrev-ref HEAD)"
-		SRC_BRNCH=$CURRBRNCH
-
-		decho "Using current branch..."
-	fi
-
 	define_env
-
-	decho_log "Branch to be built: $SRC_BRNCH"
-
-	if [[ $CONFIGURE == "y" ]]; then
-		decho_log "Configure only, no builds will be made..."
-		watch_func n
-	else
-		watch_func y
-	fi
-
-	{
-		LC="$(git -C $SRC_DIR log -1 --pretty=%B)"
-		decho "Last Commit: $LC"
-	} >> $LOG
 
 	if [ -d "$OUT" ]; then
 		time make_cmd clean
