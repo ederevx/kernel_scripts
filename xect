@@ -129,7 +129,7 @@ commit_repo() {
 }
 
 watch_logs() {
-   cmd.exe /c start wsl.exe -d $WSL_DISTRO_NAME --user $LOGNAME -e sudo less +F $1 > /dev/null 2>&1 & disown
+    qterminal -e sudo less +F $1 > /dev/null 2>&1 & disown
 }
 
 send_tg_msg() {
