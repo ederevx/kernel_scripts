@@ -143,6 +143,7 @@ define_env() {
 		define_debug
 	fi
 
+	CF="$($CC --version | head -1)"
 	BUILD_STR="$SRCN release: $SRC_BRNCH-$SRC_VER-$VER built using $CF | Date: $DATE_FULL"
 
 	MKP=" \
@@ -256,7 +257,6 @@ param_main_func() {
 param_func "$@"
 
 SRC_DIR=$SRC_DIR/$SRCN
-CF="$($CC --version | head -1)"
 
 CHAT_ID=-1001255168395
 BOT_ID=1705973222:AAFjMihR-1nivjo2U3Tic9tbztJBnUK0eEY
