@@ -60,7 +60,6 @@ define_clang() {
 	CLANGMKP=" \
 		CC=$CC \
 		CXX=$CXX \
-		CPP=$CXX \
 		HOSTCC=$CC \
 		HOSTCXX=$CXX \
 		AS=$AS \
@@ -267,8 +266,6 @@ if [[ $TEST_BUILD == "y" ]]; then
 else
 	PUSH_DIR=$REL_DIR
 fi
-
-define_env
 
 # Lazy extension
 if [[ $SRCN == "lazy" ]]; then
