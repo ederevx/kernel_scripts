@@ -267,7 +267,7 @@ else
 	PUSH_DIR=$REL_DIR
 fi
 
-# Lazy extension
+# lazy extension
 if [[ $SRCN == "lazy" ]]; then
 	DC="lazy_defconfig"
 	BOT_ID=1164940747:AAGWc84XThFpq1xLdUuA2t745uJPjBmDHg4
@@ -278,6 +278,20 @@ if [[ $SRCN == "lazy" ]]; then
 		param_main_func -b custom-old-develop
 		param_main_func -b oos-develop
 		param_main_func -b pa-develop
+		exit 0
+	fi
+fi
+
+# x extension
+if [[ $SRCN == "x" ]]; then
+	DC="oneplus5_defconfig"
+	BOT_ID=1705973222:AAFjMihR-1nivjo2U3Tic9tbztJBnUK0eEY
+	HEAD_VER=1
+	if [[ $BUILD_ALL == "y" ]]; then
+		decho "Building all branches"
+		param_main_func -b base
+		param_main_func -b base-old
+		param_main_func -b base-oos
 		exit 0
 	fi
 fi
