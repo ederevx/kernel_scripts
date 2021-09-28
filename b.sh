@@ -255,7 +255,6 @@ param_main_func() {
 #
 
 param_func "$@"
-define_env
 
 SRC_DIR=$SRC_DIR/$SRCN
 CF="$($CC --version | head -1)"
@@ -263,27 +262,29 @@ CF="$($CC --version | head -1)"
 CHAT_ID=-1001255168395
 BOT_ID=1705973222:AAFjMihR-1nivjo2U3Tic9tbztJBnUK0eEY
 
-# Lazy props
-if [[ $SRCN == "lazy" ]]; then
-	DC="lazy_defconfig"
-	BOT_ID=1164940747:AAGWc84XThFpq1xLdUuA2t745uJPjBmDHg4
-	HEAD_VER=2.4
-fi
-
 if [[ $TEST_BUILD == "y" ]]; then
 	PUSH_DIR=$TEST_DIR
 else
 	PUSH_DIR=$REL_DIR
 fi
 
-if [[ $SRCN == "lazy" ]] && [[ $BUILD_ALL == "y" ]]; then
-	decho "Building all branches"
-	param_main_func -b custom-develop
-	param_main_func -b custom-old-develop
-	param_main_func -b oos-develop
-	param_main_func -b pa-develop
-else
-	main_func
+define_env
+
+# Lazy extension
+if [[ $SRCN == "lazy" ]]; then
+	DC="lazy_defconfig"
+	BOT_ID=1164940747:AAGWc84XThFpq1xLdUuA2t745uJPjBmDHg4
+	HEAD_VER=2.4
+	if [[ $BUILD_ALL == "y" ]]; then
+		decho "Building all branches"
+		param_main_func -b custom-develop
+		param_main_func -b custom-old-develop
+		param_main_func -b oos-develop
+		param_main_func -b pa-develop
+		exit 0
+	fi
 fi
+
+main_func
 
 exit 0
