@@ -87,15 +87,18 @@ define_debug() {
 }
 
 define_env() {
+	border
 	if [[ $SRC_BRNCH != "" ]]; then
-		decho "Checking out branch..."
+		echo "Checking out to branch:"
 		git checkout $SRC_BRNCH
 	else
 		CURRBRNCH="$(git rev-parse --abbrev-ref HEAD)"
 		SRC_BRNCH=$CURRBRNCH
 
-		decho "Using current branch..."
+		echo "Using current branch:"
 	fi
+	echo $SRC_BRNCH
+	border
 
 	OUT=$OUT_DIR/$SRCN/$SRC_BRNCH
 	BTI=$OUT/arch/arm64/boot
@@ -111,22 +114,17 @@ define_env() {
 	fi
 
 	LOG=$LOG_DIR/$KNAME.log
-
-	if [[ $CONFIGURE == "y" ]]; then
-		watch_func n
-		{
+	{
+		if [[ $CONFIGURE == "y" ]]; then
+			watch_func n
 			border
 			echo "Configure only, no builds will be made..."
-		} >> $LOG
-	else
-		watch_func y
-		{
+		else
+			watch_func y
 			border
 			echo "Branch to be built: $SRC_BRNCH"
-		} >> $LOG
-	fi
+		fi
 
-	{
 		echo "Last Commit:"
 		echo $(git -C $SRC_DIR log -1 --pretty=%B)
 		border
@@ -135,7 +133,6 @@ define_env() {
 	LOCALVERSION="-$KNAME"
 
 	if [[ $CVER != "" ]]; then
-		decho_log "Use clang $CVER toolchain"
 		define_clang
 	fi
 
@@ -144,6 +141,8 @@ define_env() {
 	fi
 
 	CF="$($CC --version | head -1)"
+	decho_log "Compiler being used: $CF"
+
 	BUILD_STR="$SRCN release: $SRC_BRNCH-$SRC_VER-$VER built using $CF | Date: $DATE_FULL"
 
 	MKP=" \
