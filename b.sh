@@ -290,7 +290,6 @@ if [[ $SRCN == "x" ]]; then
 		decho "Building all branches"
 		param_main_func -b base
 		param_main_func -b base-old
-		param_main_func -b base-oos
 		exit 0
 	fi
 fi
