@@ -36,7 +36,7 @@ ARCH="arm64"
 SUBARCH=$ARCH
 LWIMG="Image.gz-dtb"
 
-CC_PATH=""
+CC_PATH="$HOME/toolchain/proton/bin"
 export PATH="$CC_PATH:$PATH"
 
 C64="aarch64-linux-gnu-"
@@ -193,13 +193,7 @@ param_func() {
 				fi
 			;;
 			-cl|--clang)
-				if check_valid "$2"; then
-					CVER="$2"
-					shift
-				else
-					decho "Set to default clang version 13"
-					CVER=13
-				fi
+				USE_CLANG=y
 			;;
 			-a|--all)
 				BUILD_ALL=y

@@ -44,17 +44,17 @@ define_kname() {
 }
 
 define_clang() {
-	CC="clang-$CVER"
-	CXX="clang++-$CVER"
-	LD="ld.lld-$CVER"
-	AS="llvm-as-$CVER"
-	AR="llvm-ar-$CVER"
-	NM="llvm-nm-$CVER"
-	DIS="llvm-dis-$CVER"
-	OBJCOPY="llvm-objcopy-$CVER"
-	OBJDUMP="llvm-objdump-$CVER"
-	STRIP="llvm-strip-$CVER"
-	READELF="llvm-readelf-$CVER"
+	CC="clang"
+	CXX="clang++"
+	LD="ld.lld"
+	AS="llvm-as"
+	AR="llvm-ar"
+	NM="llvm-nm"
+	DIS="llvm-dis"
+	OBJCOPY="llvm-objcopy"
+	OBJDUMP="llvm-objdump"
+	STRIP="llvm-strip"
+	READELF="llvm-readelf"
 	CLANG_TRIPLE=$C64
 
 	CLANGMKP=" \
@@ -132,7 +132,7 @@ define_env() {
 
 	LOCALVERSION="-$KNAME"
 
-	if [[ $CVER != "" ]]; then
+	if [[ $USE_CLANG != "n" ]]; then
 		define_clang
 	fi
 
