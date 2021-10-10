@@ -37,11 +37,11 @@ ARCH="arm64"
 SUBARCH=$ARCH
 LWIMG="Image.gz-dtb"
 
-CC_PATH="$HOME/toolchain/android/clang-r433403/bin"
+CC_PATH="$HOME/toolchain/android-clang/clang-r433403/bin:$HOME/toolchain/android64-gcc/bin:$HOME/toolchain/android32-gcc/bin"
 export PATH="$CC_PATH:$PATH"
 
-C64="aarch64-linux-gnu-"
-C32="arm-linux-gnueabi-"
+C64="aarch64-linux-android-"
+C32="arm-linux-androideabi-"
 CC="${C64}gcc"
 
 #
