@@ -33,8 +33,7 @@ watch_func() {
 define_kname() {
 	if [[ $SRCN == "fourteen" ]]; then
 		SRC_VER="$BRNCH_VER"
-		KNAME="$SRCN-$SRC_VER"
-		FORCE_VER=y
+		KNAME="$SRCN-$SRC_VER-$VER"
 	else
 		SRC_VER="v$HEAD_VER-$BRNCH_VER"
 		KNAME="$SRCN-$SRC_BRNCH-$SRC_VER-$VER"
@@ -58,37 +57,27 @@ define_clang() {
 	READELF="llvm-readelf"
 	CLANG_TRIPLE=$C64
 
-	if [[ $SRCN == "fourteen" ]]; then
-		CLANGMKP=" \
-			CC=$CC \
-			CXX=$CXX \
-			HOSTCC=$CC \
-			HOSTCXX=$CXX \
-			CLANG_TRIPLE=$CLANG_TRIPLE \
-			"
-	else
-		CLANGMKP=" \
-			CC=$CC \
-			CXX=$CXX \
-			HOSTCC=$CC \
-			HOSTCXX=$CXX \
-			AS=$AS \
-			AR=$AR \
-			LLVM_AR=$AR \
-			HOSTAR=$AR \
-			LD=$LD \
-			HOSTLD=$LD \
-			NM=$NM \
-			LLVM_NM=$NM \
-			DIS=$DIS \
-			LLVM_DIS=$DIS \
-			OBJCOPY=$OBJCOPY \
-			OBJDUMP=$OBJDUMP \
-			STRIP=$STRIP \
-			READELF=$READELF \
-			CLANG_TRIPLE=$CLANG_TRIPLE \
-			"
-	fi
+	CLANGMKP=" \
+		CC=$CC \
+		CXX=$CXX \
+		HOSTCC=$CC \
+		HOSTCXX=$CXX \
+		AS=$AS \
+		AR=$AR \
+		LLVM_AR=$AR \
+		HOSTAR=$AR \
+		LD=$LD \
+		HOSTLD=$LD \
+		NM=$NM \
+		LLVM_NM=$NM \
+		DIS=$DIS \
+		LLVM_DIS=$DIS \
+		OBJCOPY=$OBJCOPY \
+		OBJDUMP=$OBJDUMP \
+		STRIP=$STRIP \
+		READELF=$READELF \
+		CLANG_TRIPLE=$CLANG_TRIPLE \
+		"
 }
 
 define_debug() {
