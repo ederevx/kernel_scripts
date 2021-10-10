@@ -33,7 +33,8 @@ watch_func() {
 define_kname() {
 	if [[ $SRCN == "fourteen" ]]; then
 		SRC_VER="$BRNCH_VER"
-		KNAME="$SRCN-$SRC_VER-$VER"
+		KNAME="$SRCN-$SRC_VER"
+		FORCE_VER=y
 	else
 		SRC_VER="v$HEAD_VER-$BRNCH_VER"
 		KNAME="$SRCN-$SRC_BRNCH-$SRC_VER-$VER"
@@ -57,27 +58,37 @@ define_clang() {
 	READELF="llvm-readelf"
 	CLANG_TRIPLE=$C64
 
-	CLANGMKP=" \
-		CC=$CC \
-		CXX=$CXX \
-		HOSTCC=$CC \
-		HOSTCXX=$CXX \
-		AS=$AS \
-		AR=$AR \
-		LLVM_AR=$AR \
-		HOSTAR=$AR \
-		LD=$LD \
-		HOSTLD=$LD \
-		NM=$NM \
-		LLVM_NM=$NM \
-		DIS=$DIS \
-		LLVM_DIS=$DIS \
-		OBJCOPY=$OBJCOPY \
-		OBJDUMP=$OBJDUMP \
-		STRIP=$STRIP \
-		READELF=$READELF \
-		CLANG_TRIPLE=$CLANG_TRIPLE \
-		"
+	if [[ $SRCN == "fourteen" ]]; then
+		CLANGMKP=" \
+			CC=$CC \
+			CXX=$CXX \
+			HOSTCC=$CC \
+			HOSTCXX=$CXX \
+			CLANG_TRIPLE=$CLANG_TRIPLE \
+			"
+	else
+		CLANGMKP=" \
+			CC=$CC \
+			CXX=$CXX \
+			HOSTCC=$CC \
+			HOSTCXX=$CXX \
+			AS=$AS \
+			AR=$AR \
+			LLVM_AR=$AR \
+			HOSTAR=$AR \
+			LD=$LD \
+			HOSTLD=$LD \
+			NM=$NM \
+			LLVM_NM=$NM \
+			DIS=$DIS \
+			LLVM_DIS=$DIS \
+			OBJCOPY=$OBJCOPY \
+			OBJDUMP=$OBJDUMP \
+			STRIP=$STRIP \
+			READELF=$READELF \
+			CLANG_TRIPLE=$CLANG_TRIPLE \
+			"
+	fi
 }
 
 define_debug() {
@@ -105,14 +116,6 @@ define_env() {
 
 	define_kname
 
-	if [[ $FORCE_VER != "y" ]]; then
-		while [[ -f $PUSH_DIR/$KNAME.zip ]]
-			do
-			VER="$(($VER + 1))"
-			define_kname
-		done
-	fi
-
 	LOG=$LOG_DIR/$KNAME.log
 	{
 		if [[ $CONFIGURE == "y" ]]; then
@@ -129,6 +132,14 @@ define_env() {
 		echo $(git -C $SRC_DIR log -1 --pretty=%B)
 		border
 	} >> $LOG
+
+	if [[ $FORCE_VER != "y" ]]; then
+		while [[ -f $LOG_DIR/$KNAME.log ]]
+			do
+			VER="$(($VER + 1))"
+			define_kname
+		done
+	fi
 
 	LOCALVERSION="-$KNAME"
 
@@ -198,7 +209,7 @@ zip_func() {
 		create_dir $PUSH_DIR
 	fi
 
-	mv -f $BTI/$LWIMG $ZIP_DIR
+	cp -f $BTI/$LWIMG $ZIP_DIR
 	touch version
 
 	{
@@ -215,6 +226,25 @@ zip_func() {
 	rm -f version
 }
 
+pack_func() {
+	if [ ! -d $PACK_DIR ]; then
+		echo "No $PACK_DIR directory, abort!"
+		exit 1
+	fi
+
+	cd $PACK_DIR
+
+	./gradlew unpack
+	mv -f $BTI/$LWIMG $PACK_DIR/build/unzip_boot/kernel
+	./gradlew pack
+
+	if [ ! -d $PACK_DIR/output ]; then
+		create_dir $PACK_DIR/output
+	fi
+
+	mv -f boot.img.signed $PACK_DIR/output/boot.img
+}
+
 main_func() {
 	if [ ! -d $SRC_DIR ] || [[ $SRCN == "" ]]; then
 		decho_log "Abort, source directory must exist and source name must be defined."
@@ -229,10 +259,12 @@ main_func() {
 	elif [ ! -d $ZIP_DIR ]; then
 		decho_log "There's no zip directory, abort."
 		err_tg_msg
+	elif [[ $SRCN == "fourteen" ]]; then
+		pack_func
+		push_update "$PACK_DIR/output/boot.img"
 	else
 		zip_func
-
-		push_update $PUSH_DIR/$KNAME
+		push_update "$PUSH_DIR/$KNAME.zip"
 
 		if [[ $TEST_BUILD != "y" ]]; then
 			cd $REL_DIR

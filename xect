@@ -16,6 +16,7 @@ REL_DIR=$HOME/releases
 TEST_DIR=$HOME/test
 SRT_DIR=$HOME/scripts
 ZIP_DIR=$HOME/zip
+PACK_DIR=$HOME/bimg
 LOG_DIR=$HOME/buildlog
 
 AUTH_STR="ederekun <sedrickvince@gmail.com>"
@@ -36,7 +37,7 @@ ARCH="arm64"
 SUBARCH=$ARCH
 LWIMG="Image.gz-dtb"
 
-CC_PATH="$HOME/toolchain/proton/bin"
+CC_PATH="$HOME/toolchain/android/clang-r433403/bin"
 export PATH="$CC_PATH:$PATH"
 
 C64="aarch64-linux-gnu-"
@@ -159,9 +160,9 @@ zip_image() {
 
 push_update() {
     decho_log "Pushing update..."
-    if [ -f $1.zip ]; then
+    if [ -f $1 ]; then
         send_tg_msg "Build finished successfully! $BUILD_STR"
-        send_tg_file $1.zip
+        send_tg_file $1
     else
         err_tg_msg
     fi
