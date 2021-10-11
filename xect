@@ -21,7 +21,7 @@ LOG_DIR=$HOME/buildlog
 
 AUTH_STR="ederekun <sedrickvince@gmail.com>"
 
-JN=10
+JN=12
 LN=8
 
 SRCN="x"
