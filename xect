@@ -130,7 +130,9 @@ commit_repo() {
 }
 
 watch_logs() {
-    x-terminal-emulator -e "sudo less +F $1" > /dev/null 2>&1 & disown
+    {
+		x-terminal-emulator -e "sudo less +F $1" & disown
+	} &> /dev/null
 }
 
 send_tg_msg() {

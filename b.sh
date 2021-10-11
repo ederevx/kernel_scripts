@@ -105,23 +105,6 @@ define_env() {
 
 	define_kname
 
-	LOG=$LOG_DIR/$KNAME.log
-	{
-		if [[ $CONFIGURE == "y" ]]; then
-			watch_func n
-			border
-			echo "Configure only, no builds will be made..."
-		else
-			watch_func y
-			border
-			echo "Branch to be built: $SRC_BRNCH"
-		fi
-
-		echo "Last Commit:"
-		echo $(git -C $SRC_DIR log -1 --pretty=%B)
-		border
-	} >> $LOG
-
 	if [[ $FORCE_VER != "y" ]]; then
 		while [[ -f $LOG_DIR/$KNAME.log ]]
 			do
@@ -129,6 +112,26 @@ define_env() {
 			define_kname
 		done
 	fi
+
+	LOG=$LOG_DIR/$KNAME.log
+
+	if [[ $CONFIGURE == "y" ]]; then
+		watch_func n
+	else
+		watch_func y
+	fi
+
+	{
+		border
+		if [[ $CONFIGURE == "y" ]]; then
+			echo "Configure only, no builds will be made..."
+		else
+			echo "Branch to be built: $SRC_BRNCH"
+		fi
+		echo "Last Commit:"
+		echo $(git -C $SRC_DIR log -1 --pretty=%B)
+		border
+	} >> $LOG
 
 	LOCALVERSION="-$KNAME"
 
@@ -192,13 +195,19 @@ build_func() {
 }
 
 zip_func() {
+	if [ ! -d $ZIP_DIR ]; then
+		decho_log "There's no zip directory, abort!"
+		err_tg_msg
+		exit 1
+	fi
+
 	cd $ZIP_DIR
 
 	if [ ! -d $PUSH_DIR ]; then
 		create_dir $PUSH_DIR
 	fi
 
-	cp -f $BTI/$LWIMG $ZIP_DIR
+	mv -f $BTI/$LWIMG $ZIP_DIR
 	touch version
 
 	{
@@ -217,7 +226,7 @@ zip_func() {
 
 pack_func() {
 	if [ ! -d $PACK_DIR ]; then
-		echo "No $PACK_DIR directory, abort!"
+		decho "No $PACK_DIR directory, abort!"
 		exit 1
 	fi
 
@@ -244,9 +253,6 @@ main_func() {
 
 	if [ ! -f $BTI/$LWIMG ]; then
 		decho_log "There's no image found in $OUT!"
-		err_tg_msg
-	elif [ ! -d $ZIP_DIR ]; then
-		decho_log "There's no zip directory, abort."
 		err_tg_msg
 	elif [[ $SRCN == "fourteen" ]]; then
 		pack_func
