@@ -159,6 +159,8 @@ push_update() {
     if [ -f $1 ]; then
         send_tg_msg "Build finished successfully! $BUILD_STR"
         send_tg_file $1
+		# Always send logs
+		send_tg_file $LOG
     else
         err_tg_msg
     fi
