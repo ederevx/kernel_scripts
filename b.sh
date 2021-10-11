@@ -226,7 +226,7 @@ zip_func() {
 
 pack_func() {
 	if [ ! -d $PACK_DIR ]; then
-		decho "No $PACK_DIR directory, abort!"
+		decho_log "No $PACK_DIR directory, abort!"
 		exit 1
 	fi
 
