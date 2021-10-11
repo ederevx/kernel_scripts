@@ -57,7 +57,7 @@ define_clang() {
 	OBJDUMP="llvm-objdump"
 	STRIP="llvm-strip"
 	READELF="llvm-readelf"
-	CLANG_TRIPLE=$C64
+	CLANG_TRIPLE=aarch64-linux-gnu-
 
 	CLANGMKP=" \
 		CC=$CC \
