@@ -11,23 +11,25 @@ decho "Executing build script..."
 # Build functions
 #
 
-watch_func() {
-	if [[ $1 != "n" ]]; then
-		if [ ! -d $LOG_DIR ]; then
-			create_dir $LOG_DIR
-		fi
-
-		if [ ! -f $LOG ]; then
-			touch $LOG_DIR/$KNAME.log
-		else
-			echo "" > $LOG
-		fi
-
-		decho "Build start: $DATE_FULL" >> $LOG
-		watch_logs $LOG
-	else
-		LOG=/dev/null
+define_log() {
+	if [ ! -d $LOG_DIR ]; then
+		create_dir $LOG_DIR
 	fi
+
+	if [ ! -f $LOG ]; then
+		touch $LOG_DIR/$KNAME.log
+	else
+		echo "" > $LOG
+	fi
+
+	decho "Build start: $DATE_FULL" >> $LOG
+	LOG=$LOG_DIR/$KNAME.log
+	{
+		border
+		echo "Last Commit:"
+		echo $(git -C $SRC_DIR log -1 --pretty=%B)
+		border
+	} >> $LOG
 }
 
 define_kname() {
@@ -113,33 +115,22 @@ define_env() {
 		done
 	fi
 
-	LOG=$LOG_DIR/$KNAME.log
-
 	if [[ $CONFIGURE == "y" ]]; then
-		watch_func n
+		LOG=/dev/null
+		echo "Configure only, no builds will be made..."
 	else
-		watch_func y
+		LOG=$LOG_DIR/$KNAME.log
+		define_log
+		decho_log "Branch to be built: $SRC_BRNCH"
 	fi
-
-	{
-		border
-		if [[ $CONFIGURE == "y" ]]; then
-			echo "Configure only, no builds will be made..."
-		else
-			echo "Branch to be built: $SRC_BRNCH"
-		fi
-		echo "Last Commit:"
-		echo $(git -C $SRC_DIR log -1 --pretty=%B)
-		border
-	} >> $LOG
 
 	LOCALVERSION="-$KNAME"
 
-	if [[ $USE_CLANG != "n" ]]; then
+	if [[ $USE_CLANG == "y" ]]; then
 		define_clang
 	fi
 
-	if [[ $DEBUG != "n" ]]; then
+	if [[ $DEBUG == "y" ]]; then
 		define_debug
 	fi
 

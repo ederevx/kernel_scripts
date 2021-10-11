@@ -129,12 +129,6 @@ commit_repo() {
 	git commit $C_CMD -s -m "$C_MSG" --author="$AUTH_STR" --date="$DATE_FULL"
 }
 
-watch_logs() {
-    {
-		x-terminal-emulator -e "sudo less +F $1" & disown
-	} &> /dev/null
-}
-
 send_tg_msg() {
     curl -X POST "https://api.telegram.org/bot$BOT_ID/sendMessage" \
 		-d "chat_id=$CHAT_ID&text=$1" &> /dev/null
