@@ -121,7 +121,6 @@ define_env() {
 	else
 		LOG=$LOG_DIR/$KNAME.log
 		define_log
-		decho_log "Branch to be built: $SRC_BRNCH"
 	fi
 
 	LOCALVERSION="-$KNAME"
