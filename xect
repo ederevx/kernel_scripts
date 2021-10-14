@@ -22,7 +22,7 @@ LOG_DIR=$HOME/buildlog
 AUTH_STR="ederekun <sedrickvince@gmail.com>"
 
 JN=12
-LN=8
+LN=10
 
 SRCN="x"
 DC="oneplus5_defconfig"
