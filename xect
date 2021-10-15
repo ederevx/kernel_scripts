@@ -18,6 +18,8 @@ SRT_DIR=$HOME/scripts
 ZIP_DIR=$HOME/zip
 PACK_DIR=$HOME/bimg
 LOG_DIR=$HOME/buildlog
+CLANG_DIR=$HOME/toolchain/clang
+GCC_DIR=$HOME/toolchain/gcc
 
 AUTH_STR="ederekun <sedrickvince@gmail.com>"
 
@@ -37,7 +39,9 @@ ARCH="arm64"
 SUBARCH=$ARCH
 LWIMG="Image.gz-dtb"
 
-CC_PATH="$HOME/toolchain/clang/clang-r433403/bin:$HOME/toolchain/gcc64/bin:$HOME/toolchain/gcc32/bin"
+CLANG_PATH="$CLANG_DIR/clang-r433403/bin"
+GCC_PATH="${GCC_DIR}64/bin:${GCC_DIR}32/bin"
+CC_PATH="$CLANG_PATH:$GCC_PATH"
 export PATH="$CC_PATH:$PATH"
 
 C64="aarch64-linux-android-"
@@ -72,15 +76,17 @@ create_dir() {
 }
 
 update_repo() {
-	cd $1
-    decho "Updating $1 repository..."
+	if [ -d $1 ]; then
+		cd $1
+		decho "Updating $1 repository..."
 
-    if [[ $1 == "$ZIP_DIR" ]]; then
-        git pull --no-rebase upstream master
-        git merge FETCH_HEAD
-    fi
+		if [[ $1 == "$ZIP_DIR" ]]; then
+			git pull --no-rebase upstream master
+			git merge FETCH_HEAD
+		fi
 
-	git pull --ff-only
+		git pull --ff-only
+	fi
 }
 
 update_linux() {
