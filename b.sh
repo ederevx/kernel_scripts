@@ -205,6 +205,7 @@ zip_func() {
 		echo "You are flashing:"
 		echo "$SRCN kernel by ederekun"
 		echo "Build code: $SRC_BRNCH-$BRNCH_VER-$VER"
+		echo "Date: $DATE_FULL"
 		border
 	} >> version
 
