@@ -27,7 +27,7 @@ JN=12
 LN=10
 
 SRCN="x"
-DC="oneplus5_defconfig"
+DC="msm8998_oneplus_android_defconfig"
 CURR_DATE="$(date +'%Y%m%d')"
 DATE_FULL="$(date -R)"
 HEAD_VER=1

@@ -48,15 +48,6 @@ define_kname() {
 define_clang() {
 	CC="clang"
 	CXX="clang++"
-	LD="ld.lld"
-	AS="llvm-as"
-	AR="llvm-ar"
-	NM="llvm-nm"
-	DIS="llvm-dis"
-	OBJCOPY="llvm-objcopy"
-	OBJDUMP="llvm-objdump"
-	STRIP="llvm-strip"
-	READELF="llvm-readelf"
 	CLANG_TRIPLE=aarch64-linux-gnu-
 
 	CLANGMKP=" \
@@ -64,22 +55,37 @@ define_clang() {
 		CXX=$CXX \
 		HOSTCC=$CC \
 		HOSTCXX=$CXX \
-		AS=$AS \
-		AR=$AR \
-		LLVM_AR=$AR \
-		HOSTAR=$AR \
-		LD=$LD \
-		HOSTLD=$LD \
-		NM=$NM \
-		LLVM_NM=$NM \
-		DIS=$DIS \
-		LLVM_DIS=$DIS \
-		OBJCOPY=$OBJCOPY \
-		OBJDUMP=$OBJDUMP \
-		STRIP=$STRIP \
-		READELF=$READELF \
 		CLANG_TRIPLE=$CLANG_TRIPLE \
 		"
+
+	if [[ $SRCN != "fourteen" ]]; then
+		LD="ld.lld"
+		AS="llvm-as"
+		AR="llvm-ar"
+		NM="llvm-nm"
+		DIS="llvm-dis"
+		OBJCOPY="llvm-objcopy"
+		OBJDUMP="llvm-objdump"
+		STRIP="llvm-strip"
+		READELF="llvm-readelf"
+		CLANGMKP=" \
+			$CLANGMKP \
+			AS=$AS \
+			AR=$AR \
+			LLVM_AR=$AR \
+			HOSTAR=$AR \
+			LD=$LD \
+			HOSTLD=$LD \
+			NM=$NM \
+			LLVM_NM=$NM \
+			DIS=$DIS \
+			LLVM_DIS=$DIS \
+			OBJCOPY=$OBJCOPY \
+			OBJDUMP=$OBJDUMP \
+			STRIP=$STRIP \
+			READELF=$READELF \
+			"
+	fi
 }
 
 define_debug() {
