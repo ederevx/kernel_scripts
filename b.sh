@@ -260,7 +260,7 @@ main_func() {
 
 		if [[ $TEST_BUILD != "y" ]]; then
 			cd $REL_DIR
-			git checkout $HEAD_VER
+			git checkout -b $SRCN-$SRC_VER-$VER
 			commit_repo "$(pwd)" -m "$BUILD_STR" -a
 		fi
 	fi
