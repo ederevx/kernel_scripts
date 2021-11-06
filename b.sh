@@ -48,7 +48,7 @@ define_kname() {
 define_clang() {
 	CC="clang"
 	CXX="clang++"
-	CLANG_TRIPLE=aarch64-linux-gnu-
+	CLANG_TRIPLE=$C64
 
 	CLANGMKP=" \
 		CC=$CC \
