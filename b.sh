@@ -33,13 +33,8 @@ define_log() {
 }
 
 define_kname() {
-	if [[ $SRCN == "fourteen" ]]; then
-		SRC_VER="$BRNCH_VER"
-		KNAME="$SRCN-$SRC_VER-$VER"
-	else
-		SRC_VER="v$HEAD_VER-$BRNCH_VER"
-		KNAME="$SRCN-$SRC_BRNCH-$SRC_VER-$VER"
-	fi
+	SRC_VER="v$HEAD_VER-$BRNCH_VER"
+	KNAME="$SRCN-$SRC_BRNCH-$SRC_VER-$VER"
 	if [[ $TEST_BUILD == "y" ]]; then
 		KNAME="$KNAME-test"
 	fi
@@ -58,34 +53,32 @@ define_clang() {
 		CLANG_TRIPLE=$CLANG_TRIPLE \
 		"
 
-	if [[ $SRCN != "fourteen" ]]; then
-		LD="ld.lld"
-		AS="llvm-as"
-		AR="llvm-ar"
-		NM="llvm-nm"
-		DIS="llvm-dis"
-		OBJCOPY="llvm-objcopy"
-		OBJDUMP="llvm-objdump"
-		STRIP="llvm-strip"
-		READELF="llvm-readelf"
-		CLANGMKP=" \
-			$CLANGMKP \
-			AS=$AS \
-			AR=$AR \
-			LLVM_AR=$AR \
-			HOSTAR=$AR \
-			LD=$LD \
-			HOSTLD=$LD \
-			NM=$NM \
-			LLVM_NM=$NM \
-			DIS=$DIS \
-			LLVM_DIS=$DIS \
-			OBJCOPY=$OBJCOPY \
-			OBJDUMP=$OBJDUMP \
-			STRIP=$STRIP \
-			READELF=$READELF \
-			"
-	fi
+	LD="ld.lld"
+	AS="llvm-as"
+	AR="llvm-ar"
+	NM="llvm-nm"
+	DIS="llvm-dis"
+	OBJCOPY="llvm-objcopy"
+	OBJDUMP="llvm-objdump"
+	STRIP="llvm-strip"
+	READELF="llvm-readelf"
+	CLANGMKP=" \
+		$CLANGMKP \
+		AS=$AS \
+		AR=$AR \
+		LLVM_AR=$AR \
+		HOSTAR=$AR \
+		LD=$LD \
+		HOSTLD=$LD \
+		NM=$NM \
+		LLVM_NM=$NM \
+		DIS=$DIS \
+		LLVM_DIS=$DIS \
+		OBJCOPY=$OBJCOPY \
+		OBJDUMP=$OBJDUMP \
+		STRIP=$STRIP \
+		READELF=$READELF \
+		"
 }
 
 define_debug() {
@@ -221,25 +214,6 @@ zip_func() {
 	rm -f version
 }
 
-pack_func() {
-	if [ ! -d $PACK_DIR ]; then
-		decho_log "No $PACK_DIR directory, abort!"
-		exit 1
-	fi
-
-	cd $PACK_DIR
-
-	./gradlew unpack
-	mv -f $BTI/$LWIMG $PACK_DIR/build/unzip_boot/kernel
-	./gradlew pack
-
-	if [ ! -d $PACK_DIR/output ]; then
-		create_dir $PACK_DIR/output
-	fi
-
-	mv -f boot.img.signed $PACK_DIR/output/boot.img
-}
-
 main_func() {
 	if [ ! -d $SRC_DIR ] || [[ $SRCN == "" ]]; then
 		decho_log "Abort, source directory must exist and source name must be defined."
@@ -251,9 +225,6 @@ main_func() {
 	if [ ! -f $BTI/$LWIMG ]; then
 		decho_log "There's no image found in $OUT!"
 		err_tg_msg
-	elif [[ $SRCN == "fourteen" ]]; then
-		pack_func
-		push_update "$PACK_DIR/output/boot.img"
 	else
 		zip_func
 		push_update "$PUSH_DIR/$KNAME.zip"
