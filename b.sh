@@ -279,7 +279,7 @@ fi
 if [[ $SRCN == "x" ]]; then
 	DC="oneplus5_defconfig"
 	BOT_ID=1705973222:AAFjMihR-1nivjo2U3Tic9tbztJBnUK0eEY
-	HEAD_VER=1
+	HEAD_VER=2
 	if [[ $BUILD_ALL == "y" ]]; then
 		decho "Building all branches"
 		param_main_func -b base
