@@ -35,6 +35,7 @@ define_log() {
 define_kname() {
 	SRC_VER="v$HEAD_VER-$BRNCH_VER"
 	KNAME="$SRCN-$SRC_BRNCH-$SRC_VER-$VER"
+	KNAME_S="$SRCN-$SRC_VER-$VER"
 	if [[ $TEST_BUILD == "y" ]]; then
 		KNAME="$KNAME-test"
 	fi
@@ -122,8 +123,6 @@ define_env() {
 		define_log
 	fi
 
-	LOCALVERSION="-$KNAME"
-
 	if [[ $USE_CLANG == "y" ]]; then
 		define_clang
 	fi
@@ -144,7 +143,7 @@ define_env() {
 		SUBARCH=$SUBARCH \
 		CROSS_COMPILE=$C64 \
 		CROSS_COMPILE_ARM32=$C32 \
-		LOCALVERSION=-$KNAME \
+		LOCALVERSION=-$KNAME_S \
 		O=$OUT \
 		-j$JN \
 		-l$LN \
