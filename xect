@@ -16,10 +16,10 @@ REL_DIR=$HOME/releases
 TEST_DIR=$HOME/test
 SRT_DIR=$HOME/scripts
 ZIP_DIR=$HOME/zip
-PACK_DIR=$HOME/bimg
 LOG_DIR=$HOME/buildlog
 CLANG_DIR=$HOME/toolchain/clang
 GCC_DIR=$HOME/toolchain/gcc
+SITE_DIR=$HOME/ederekun-site
 
 AUTH_STR="ederekun <sedrickvince@gmail.com>"
 

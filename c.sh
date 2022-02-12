@@ -9,21 +9,19 @@ decho "Executing commit script..."
 
 param_func "$@"
 
-if [ -d $REL_DIR ]; then
-	commit_repo $REL_DIR "$@"
-fi
+DIR_LIST=(
+	"$REL_DIR"
+	"$SRT_DIR"
+	"$ZIP_DIR"
+	"$SRC_DIR/$SRCN"
+	"$REL_DIR"
+	"$SITE_DIR"
+)
 
-if [ -d $SRT_DIR ]; then
-	commit_repo $SRT_DIR "$@"
-fi
-
-if [ -d $ZIP_DIR ]; then
-	commit_repo $ZIP_DIR "$@"
-fi
-
-SRC_DIR=$SRC_DIR/$SRCN
-if [ -d $SRC_DIR ]; then
-	commit_repo $SRC_DIR "$@"
-fi
+for DIR in ${DIR_LIST[@]}; do
+	if [ -d $DIR ]; then
+		commit_repo $DIR "$@"
+	fi
+done
 
 exit 0
