@@ -7,9 +7,6 @@
 # Variable declarations
 #
 
-TEST_BUILD=y
-DEBUG=n
-
 SRC_DIR=$HOME/kernel
 OUT_DIR=$HOME/output
 REL_DIR=$HOME/releases
@@ -21,32 +18,10 @@ CLANG_DIR=$HOME/toolchain/clang
 GCC_DIR=$HOME/toolchain/gcc
 SITE_DIR=$HOME/ederekun-site
 
-AUTH_STR="ederekun <sedrickvince@gmail.com>"
-
-JN=12
-LN=10
-
-SRCN="x"
-DC="msm8998_oneplus_android_defconfig"
 CURR_DATE="$(date +'%Y%m%d')"
 DATE_FULL="$(date -R)"
-HEAD_VER=1
-BRNCH_VER=$CURR_DATE
-VER=1
 
-AF="arch/arm64/configs"
-ARCH="arm64"
-SUBARCH=$ARCH
-LWIMG="Image.gz-dtb"
-
-CLANG_PATH="$CLANG_DIR/clang-r445002/bin"
-GCC_PATH="${GCC_DIR}64/bin:${GCC_DIR}32/bin"
-CC_PATH="$CLANG_PATH:$GCC_PATH"
-export PATH="$CC_PATH:$PATH"
-
-C64="aarch64-linux-gnu-"
-C32="arm-linux-gnueabi-"
-CC="${C64}gcc"
+AUTH_STR="ederekun <sedrickvince@gmail.com>"
 
 #
 # Function declarations
@@ -76,17 +51,19 @@ create_dir() {
 }
 
 update_repo() {
-	if [ -d $1 ]; then
-		cd $1
-		decho "Updating $1 repository..."
-
-		if [[ $1 == "$ZIP_DIR" ]]; then
-			git pull --no-rebase upstream master
-			git merge FETCH_HEAD
-		fi
-
-		git pull --ff-only
+	if [ ! -d $1/.git ]; then 
+		return 
 	fi
+
+	cd $1
+	decho "Updating $1 repository..."
+
+	if [[ $1 == "$ZIP_DIR" ]]; then
+		git pull --no-rebase upstream master
+		git merge FETCH_HEAD
+	fi
+
+	git pull --ff-only
 }
 
 update_linux() {
@@ -107,6 +84,10 @@ check_valid() {
 }
 
 commit_repo() {
+	if [ ! -d $1/.git ]; then 
+		return 
+	fi
+
     cd $1
     decho "Commiting in $1 repository..."
 

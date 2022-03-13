@@ -19,9 +19,7 @@ DIR_LIST=(
 )
 
 for DIR in ${DIR_LIST[@]}; do
-	if [ -d $DIR ]; then
-		commit_repo $DIR "$@"
-	fi
+	commit_repo $DIR "$@"
 done
 
 exit 0

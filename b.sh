@@ -172,14 +172,14 @@ build_func() {
 		exit 0
 	fi
 
-	if [[ $CONFIGURE != "y" ]]; then
-		time make_cmd
-	else
+	if [[ $CONFIGURE == "y" ]]; then
 		time make_cmd menuconfig
 		cp -v $OUT/.config $SRC_DIR/$AF/$DC
 		decho "Copied .config to $DC"
 		exit 0
 	fi
+
+	time make_cmd
 }
 
 zip_func() {
@@ -247,6 +247,31 @@ param_main_func() {
 # Build script
 #
 
+TEST_BUILD=y
+DEBUG=n
+
+JN=12
+LN=10
+
+DC="msm8998_oneplus_android_defconfig"
+HEAD_VER=1
+BRNCH_VER=$CURR_DATE
+VER=1
+
+AF="arch/arm64/configs"
+ARCH="arm64"
+SUBARCH=$ARCH
+LWIMG="Image.gz-dtb"
+
+CLANG_PATH="$CLANG_DIR/clang-r445002/bin"
+GCC_PATH="${GCC_DIR}64/bin:${GCC_DIR}32/bin"
+CC_PATH="$CLANG_PATH:$GCC_PATH"
+export PATH="$CC_PATH:$PATH"
+
+C64="aarch64-linux-gnu-"
+C32="arm-linux-gnueabi-"
+CC="${C64}gcc"
+
 param_func "$@"
 
 SRC_DIR=$SRC_DIR/$SRCN
@@ -263,7 +288,6 @@ fi
 # x extension
 if [[ $SRCN == "x" ]]; then
 	DC="oneplus5_defconfig"
-	BOT_ID=1705973222:AAFjMihR-1nivjo2U3Tic9tbztJBnUK0eEY
 	HEAD_VER=2
 	if [[ $BUILD_ALL == "y" ]]; then
 		decho "Building all branches"

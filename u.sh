@@ -9,11 +9,6 @@ decho "Executing update script..."
 
 param_func "$@"
 
-if [[ $1 == "-x" ]]; then
-	update_linux
-	exit 0
-fi
-
 DIR_LIST=(
 	"$REL_DIR"
 	"$SRT_DIR"
@@ -23,8 +18,12 @@ DIR_LIST=(
 	"${GCC_DIR}32"
 )
 
-for DIR in ${DIR_LIST[@]}; do
-	update_repo $DIR
-done
+if [[ $1 == "-x" ]]; then
+	update_linux
+else
+	for DIR in ${DIR_LIST[@]}; do
+		update_repo $DIR
+	done
+fi
 
 exit 0
