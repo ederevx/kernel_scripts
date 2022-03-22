@@ -7,16 +7,18 @@
 # Variable declarations
 #
 
-SRC_DIR=$HOME/kernel
-OUT_DIR=$HOME/output
-REL_DIR=$HOME/releases
-TEST_DIR=$HOME/test
-SRT_DIR=$HOME/scripts
-ZIP_DIR=$HOME/zip
-LOG_DIR=$HOME/buildlog
-CLANG_DIR=$HOME/toolchain/clang
-GCC_DIR=$HOME/toolchain/gcc
-SITE_DIR=$HOME/ederekun-site
+PARENT_DIR=/ext/Development
+
+SRC_DIR=$PARENT_DIR/kernel
+OUT_DIR=$PARENT_DIR/output
+REL_DIR=$PARENT_DIR/releases
+TEST_DIR=$PARENT_DIR/test
+SRT_DIR=$PARENT_DIR/scripts
+ZIP_DIR=$PARENT_DIR/zip
+LOG_DIR=$PARENT_DIR/buildlog
+CLANG_DIR=$PARENT_DIR/toolchain/clang
+GCC_DIR=$PARENT_DIR/toolchain/gcc
+SITE_DIR=$PARENT_DIR/ederekun-site
 
 CURR_DATE="$(date +'%Y%m%d')"
 DATE_FULL="$(date -R)"
