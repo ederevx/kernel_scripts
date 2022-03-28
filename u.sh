@@ -18,12 +18,8 @@ DIR_LIST=(
 	"${GCC_DIR}32"
 )
 
-if [[ $1 == "-x" ]]; then
-	update_linux
-else
-	for DIR in ${DIR_LIST[@]}; do
-		update_repo $DIR
-	done
-fi
+for DIR in ${DIR_LIST[@]}; do
+	update_repo $DIR
+done
 
 exit 0
