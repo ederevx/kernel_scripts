@@ -269,7 +269,7 @@ CC_PATH="$CLANG_PATH:$GCC_PATH"
 export PATH="$CC_PATH:$PATH"
 
 C64="aarch64-linux-gnu-"
-C32="arm-linux-gnueabi-"
+C32="arm-linux-gnu-"
 CC="${C64}gcc"
 
 param_func "$@"
