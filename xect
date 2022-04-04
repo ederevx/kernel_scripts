@@ -7,7 +7,7 @@
 # Variable declarations
 #
 
-PARENT_DIR=/ext/Development
+PARENT_DIR=$HOME
 
 SRC_DIR=$PARENT_DIR/kernel
 OUT_DIR=$PARENT_DIR/output
