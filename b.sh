@@ -292,8 +292,8 @@ if [[ $SRCN == "x" ]]; then
 	if [[ $BUILD_ALL == "y" ]]; then
 		decho "Building all branches"
 		BRNCH_LIST=(
-			"old"
 			"base"
+			"old"
 		)
 		for BRNCH in ${BRNCH_LIST[@]}; do
 			param_main_func -b $BRNCH
