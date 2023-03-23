@@ -167,12 +167,10 @@ zip_func() {
 	touch version
 
 	{
-		border
-		echo "You are flashing:"
 		echo "$SRCN kernel by ederekun"
+		border
 		echo "Build code: $SRC_BRNCH-$BRNCH_VER-$VER"
 		echo "Date: $DATE_FULL"
-		border
 	} >> version
 
 	zip_image $PUSH_DIR/$KNAME
