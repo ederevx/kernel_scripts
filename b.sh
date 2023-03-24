@@ -254,7 +254,7 @@ fi
 # x extension
 if [[ $SRCN == "x" ]]; then
 	DC="oneplus5_defconfig"
-	HEAD_VER=2
+	HEAD_VER=3
 	if [[ $BUILD_ALL == "y" ]]; then
 		decho "Building all branches"
 		BRNCH_LIST=(
