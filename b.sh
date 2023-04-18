@@ -202,6 +202,7 @@ main_func() {
 	fi
 
 	decho_log "Build done: $DATE_FULL"
+	decho "$BUILD_STR"
 }
 
 param_main_func() {
