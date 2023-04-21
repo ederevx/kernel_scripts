@@ -189,10 +189,8 @@ main_func() {
 
 	if [ ! -f $BTI/$LWIMG ]; then
 		decho_log "There's no image found in $OUT!"
-		err_tg_msg
 	else
 		zip_func
-		push_update "$PUSH_DIR/$KNAME.zip"
 
 		if [[ $TEST_BUILD != "y" ]]; then
 			cd $REL_DIR
@@ -242,9 +240,6 @@ CC="${C64}gcc"
 param_func "$@"
 
 SRC_DIR=$SRC_DIR/$SRCN
-
-CHAT_ID=-1001727712762
-BOT_ID=1705973222:AAFjMihR-1nivjo2U3Tic9tbztJBnUK0eEY
 
 if [[ $TEST_BUILD == "y" ]]; then
 	PUSH_DIR=$TEST_DIR

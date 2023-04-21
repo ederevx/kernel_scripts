@@ -118,21 +118,6 @@ commit_repo() {
 	git commit $C_CMD -s -m "$C_MSG" --author="$AUTH_STR" --date="$DATE_FULL"
 }
 
-send_tg_msg() {
-    curl -X POST "https://api.telegram.org/bot$BOT_ID/sendMessage" \
-		-d "chat_id=$CHAT_ID&text=$1" &> /dev/null
-}
-
-send_tg_file() {
-	curl -F chat_id=$CHAT_ID -F document=@$1 \
-		https://api.telegram.org/bot$BOT_ID/sendDocument &> /dev/null
-}
-
-err_tg_msg() {
-	send_tg_msg "$KNAME was not built! Something went wrong..."
-	send_tg_file $LOG
-}
-
 make_cmd() {
     decho_log "Executing make $1..."
     make $MKP $1 2>> $LOG
@@ -141,18 +126,6 @@ make_cmd() {
 zip_image() {
     decho_log "Zipping the image..."
     zip -r9 $1.zip * -x .git README.md 2>> $LOG
-}
-
-push_update() {
-    decho_log "Pushing update..."
-    if [ -f $1 ]; then
-        send_tg_msg "Build finished successfully! $BUILD_STR"
-        send_tg_file $1
-		# Always send logs
-		send_tg_file $LOG
-    else
-        err_tg_msg
-    fi
 }
 
 param_func() {
