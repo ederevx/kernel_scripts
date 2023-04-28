@@ -174,6 +174,7 @@ zip_func() {
 	} >> version
 
 	zip_image $PUSH_DIR/$KNAME
+	cp $PUSH_DIR/$KNAME.zip $SHARED_TEST_DIR
 
 	rm -f $LWIMG
 	rm -f version
