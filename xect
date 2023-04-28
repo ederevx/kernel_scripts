@@ -18,7 +18,7 @@ ZIP_DIR=$PARENT_DIR/zip
 LOG_DIR=$PARENT_DIR/buildlog
 CLANG_DIR=$PARENT_DIR/toolchain/clang
 GCC_DIR=$PARENT_DIR/toolchain/gcc
-SHARED_TEST_DIR=/mnt/hgfs/Shared/kernel-builds/
+SHARED_TEST_DIR=/mnt/hgfs/Shared/kernel-builds
 
 CURR_DATE="$(date +'%Y%m%d')"
 DATE_FULL="$(date -R)"
