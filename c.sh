@@ -15,7 +15,6 @@ DIR_LIST=(
 	"$ZIP_DIR"
 	"$SRC_DIR/$SRCN"
 	"$REL_DIR"
-	"$SITE_DIR"
 )
 
 for DIR in ${DIR_LIST[@]}; do
