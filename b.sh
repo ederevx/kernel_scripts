@@ -107,6 +107,7 @@ define_env() {
 	MKP=" \
 		$CLANGMKP \
 		$DEBUGMKP \
+		CC_WRAPPER=ccache \
 		ARCH=$ARCH \
 		SUBARCH=$SUBARCH \
 		CROSS_COMPILE=$C64 \
@@ -232,7 +233,7 @@ LWIMG="Image.gz-dtb"
 CLANG_PATH="$CLANG_DIR/clang-r450784e/bin"
 GCC_PATH="${GCC_DIR}64/bin:${GCC_DIR}32/bin"
 CC_PATH="$CLANG_PATH:$GCC_PATH"
-export PATH="$CC_PATH:$PATH"
+export PATH="/usr/local/bin:$CC_PATH:$PATH"
 
 C64="aarch64-linux-gnu-"
 C32="arm-linux-gnu-"
