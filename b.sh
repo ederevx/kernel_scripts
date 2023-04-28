@@ -203,6 +203,7 @@ main_func() {
 
 	decho_log "Build done: $DATE_FULL"
 	decho "$BUILD_STR"
+	cp $LOG $SHARED_TEST_DIR/logs
 }
 
 param_main_func() {
