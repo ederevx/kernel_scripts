@@ -267,6 +267,12 @@ if [[ $SRCN == "x" ]]; then
 	fi
 fi
 
+if [[ $SRCN == "x-ft" ]]; then
+	CLANG_PATH="$CLANG_DIR/clang-r458507/bin"
+	CC_PATH="$CLANG_PATH:$GCC_PATH"
+	export PATH="/usr/local/bin:$CC_PATH:$PATH"
+fi
+
 main_func
 
 exit 0
