@@ -7,6 +7,9 @@ source xect
 
 decho "Executing build script..."
 
+# Keep this process from being killed by OOM killer
+sudo echo -17 > /proc/$$/oom_adj
+
 #
 # Build functions
 #
