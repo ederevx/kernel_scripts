@@ -178,7 +178,8 @@ zip_func() {
 	} >> version
 
 	zip_image $PUSH_DIR/$KNAME
-	cp $PUSH_DIR/$KNAME.zip $SHARED_TEST_DIR
+	mkdir -p $SHARED_TEST_DIR/builds >> /dev/null
+	cp $PUSH_DIR/$KNAME.zip $SHARED_TEST_DIR/builds/
 
 	rm -f $LWIMG
 	rm -f version
@@ -206,7 +207,8 @@ main_func() {
 
 	decho_log "Build done: $DATE_FULL"
 	decho "$BUILD_STR"
-	cp $LOG $SHARED_TEST_DIR/logs
+	mkdir -p $SHARED_TEST_DIR/logs >> /dev/null
+	cp $LOG $SHARED_TEST_DIR/logs/
 }
 
 param_main_func() {

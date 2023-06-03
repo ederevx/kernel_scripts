@@ -18,8 +18,7 @@ ZIP_DIR=$PARENT_DIR/zip
 LOG_DIR=$PARENT_DIR/buildlog
 CLANG_DIR=$PARENT_DIR/toolchain/clang
 GCC_DIR=$PARENT_DIR/toolchain/gcc
-SHARED_TEST_DIR=/mnt/hgfs/Shared/kernel-builds
-
+SHARED_TEST_DIR=/mnt/c/Users/evcsi/WSL-Shared
 CURR_DATE="$(date +'%Y%m%d')"
 DATE_FULL="$(date -R)"
 
@@ -49,7 +48,7 @@ decho_log() {
 
 create_dir() {
 	decho "No $1 directory found! Creating $1"
-	mkdir $1
+	mkdir -p $1
 }
 
 update_repo() {
