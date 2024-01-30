@@ -226,7 +226,7 @@ DEBUG=n
 JN=12
 LN=10
 
-DC="msm8998_oneplus_android_defconfig"
+DC="msm8998_oneplus_debug_android_defconfig"
 HEAD_VER=1
 BRNCH_VER=$CURR_DATE
 VER=1
