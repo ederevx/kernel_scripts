@@ -22,7 +22,7 @@ SHARED_TEST_DIR=/mnt/c/Users/evcsi/WSL-Shared
 CURR_DATE="$(date +'%Y%m%d')"
 DATE_FULL="$(date -R)"
 
-AUTH_STR="ederekun <sedrickvince@gmail.com>"
+AUTH_STR="ederevx <sedrickvince@gmail.com>"
 
 #
 # Function declarations
