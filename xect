@@ -7,9 +7,9 @@
 # Variable declarations
 #
 
-PARENT_DIR=$HOME
+PARENT_DIR=$HOME/Repositories/kernel
 
-SRC_DIR=$PARENT_DIR/kernel
+SRC_DIR=$PARENT_DIR
 OUT_DIR=$PARENT_DIR/output
 REL_DIR=$PARENT_DIR/releases
 TEST_DIR=$PARENT_DIR/test
